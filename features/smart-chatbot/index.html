@@ -54,6 +54,17 @@
         </div>
     </div>
 
+    <!-- Try to load local config if it exists (for local development only) -->
+    <script>
+        // Try to load local-config.js if it exists (won't exist on GitHub Pages)
+        const localConfigScript = document.createElement('script');
+        localConfigScript.src = 'local-config.js';
+        localConfigScript.onerror = function() {
+            console.log('ℹ️ No local config found - use admin panel to configure API key');
+        };
+        document.head.appendChild(localConfigScript);
+    </script>
+
     <script src="knowledge-base.js"></script>
     <script src="advanced-nlp.js"></script>
     <script src="chatbot-engine.js"></script>

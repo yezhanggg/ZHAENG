@@ -108,14 +108,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 20px 210px 20px;
+    padding: 20px 20px 240px 20px;
     position: relative;
 }
 
 #upload-zone {
     width: 100%;
-    max-width: 600px;
-    padding: 80px 40px;
+    max-width: 450px;
+    padding: 60px 30px;
     background: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(1rem);
     -webkit-backdrop-filter: blur(1rem);
@@ -468,8 +468,13 @@ body {
         font-size: 80px;
     }
 
+    .upload-container {
+        padding: 20px 20px 260px 20px;
+    }
+
     #upload-zone {
-        padding: 60px 30px;
+        max-width: 380px;
+        padding: 50px 25px;
     }
 
     .upload-text {
@@ -559,6 +564,15 @@ body {
         font-size: 36px;
         padding: 20px 40px;
         letter-spacing: 4px;
+    }
+
+    .upload-container {
+        padding: 20px 20px 270px 20px;
+    }
+
+    #upload-zone {
+        max-width: 300px;
+        padding: 40px 20px;
     }
 
     #controls {
