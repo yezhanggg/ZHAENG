@@ -3,15 +3,16 @@
 
 class AIIntegration {
     constructor() {
-        // Load API settings from localStorage or use defaults
+        // Load API settings from localStorage only
+        // NO hardcoded API keys for security!
         const storedEnabled = localStorage.getItem('ai_enabled');
         const storedProvider = localStorage.getItem('ai_provider');
         const storedApiKey = localStorage.getItem('ai_api_key');
 
-        // Default to OpenRouter with sherlock-dash-alpha if not configured
+        // Default to OpenRouter with sherlock-dash-alpha
         this.enabled = storedEnabled !== null ? storedEnabled === 'true' : true;
         this.provider = storedProvider || 'openrouter';
-        this.apiKey = storedApiKey || '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';
+        this.apiKey = storedApiKey || ''; // No default key - must be set via admin panel
 
         // Save defaults if not already saved
         if (storedEnabled === null) {
@@ -20,9 +21,7 @@ class AIIntegration {
         if (storedProvider === null) {
             localStorage.setItem('ai_provider', 'openrouter');
         }
-        if (storedApiKey === null) {
-            localStorage.setItem('ai_api_key', this.apiKey);
-        }
+        // Don't auto-save empty API key
 
         // API endpoints
         this.endpoints = {
