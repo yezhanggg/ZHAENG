@@ -1,7 +1,12 @@
-# ZHAENG - Interactive Features for www.zhaeng.com
+# ZHAENG - Interactive Features for www.zhaeng.net
+
+## 🌐 Live Demo
+**Landing Page**: [https://yezhanggg.github.io/ZHAENG/](https://yezhanggg.github.io/ZHAENG/)
+
+Visit the landing page to try out all features directly!
 
 ## Project Overview
-This repository contains custom interactive features and tools for the Wix website **www.zhaeng.com**. The features built here are designed to enhance the user experience with games, interactive tools, and dynamic content.
+This repository contains custom interactive features and tools for the Wix website **www.zhaeng.net**. The features built here are designed to enhance the user experience with games, interactive tools, and dynamic content.
 
 ## Design Philosophy
 **Mobile-First Design** - All features are optimized for phone users first, then adapted for larger screens.
@@ -23,6 +28,7 @@ Features built in this repository will be integrated with the Wix website using:
 ## Project Structure
 ```
 /ZHAENG
+  index.html      - Landing page showcasing all features
   /features       - Individual interactive features and games
   /api            - Backend services and APIs (if needed)
   /shared         - Shared components and utilities
@@ -48,11 +54,32 @@ A mobile-optimized camera application that allows users to take photos with:
 
 ---
 
+### 🥠 ZHAENG Fortune Cookie
+**Status**: ✅ Complete and ready to use
+
+An interactive fortune cookie experience with beautiful animations:
+- 200 unique positive fortune messages
+- Tap-to-crack cookie animation
+- Lucky lottery numbers (6 random numbers)
+- Sparkle and confetti effects
+- Share fortunes with friends
+- Unlimited fortunes (tap for another)
+
+**Perfect for**: Daily engagement, positive vibes, social sharing, user retention
+
+📁 **Location**: `/features/fortune-cookie/`
+📖 **Documentation**: [Fortune Cookie README](features/fortune-cookie/README.md)
+🎨 **Design Notes**: [Design Philosophy](features/fortune-cookie/DESIGN_NOTES.md)
+
+---
+
 ## Planned Features
-- Interactive games
+- More interactive games (puzzle games, trivia, mini-games)
 - Additional custom tools and utilities
 - Dynamic content features
 - More mobile-optimized experiences
+- Quiz/poll tools
+- Interactive galleries
 
 ## Tech Stack
 - **HTML5**: Canvas API, MediaDevices API, Geolocation API
@@ -62,14 +89,29 @@ A mobile-optimized camera application that allows users to take photos with:
 
 ## Getting Started
 
-### For the ZHAENG Camera Feature
-1. Read the [Quick Start Guide](docs/QUICK_START.md)
-2. Enable GitHub Pages on this repository
-3. Embed or link from your Wix site at www.zhaeng.com
-4. Test on your iPhone
+### Quick Deploy (All Features)
+1. **Enable GitHub Pages**:
+   - Go to repository Settings → Pages
+   - Source: `main` branch, `/ (root)` folder
+   - Save and wait 2-3 minutes
+
+2. **Your features will be live at**:
+   - Landing Page: `https://YOUR_USERNAME.github.io/ZHAENG/`
+   - Camera: `https://YOUR_USERNAME.github.io/ZHAENG/features/zhaeng-camera/`
+   - Fortune Cookie: `https://YOUR_USERNAME.github.io/ZHAENG/features/fortune-cookie/`
+
+3. **Integrate with Wix**:
+   - Read the [Wix Integration Guide](docs/WIX_INTEGRATION_GUIDE.md)
+   - Read the [Domain Setup Guide](docs/DOMAIN_SETUP_GUIDE.md)
+   - Use iframe embeds or direct links
+   - Test on your iPhone
+
+### For Individual Features
+- **ZHAENG Camera**: [Camera README](features/zhaeng-camera/README.md)
+- **Fortune Cookie**: [Fortune Cookie README](features/fortune-cookie/README.md)
 
 ### For Development
 Each feature has its own README with detailed setup and customization instructions.
 
 ---
-*This is a work-in-progress project to extend www.zhaeng.com with custom interactive features.*
+*This is a work-in-progress project to extend www.zhaeng.net with custom interactive features.*

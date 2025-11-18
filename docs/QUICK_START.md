@@ -1,7 +1,7 @@
 # Quick Start Guide - ZHAENG Camera on Wix
 
 ## Goal
-Get the ZHAENG Camera feature working on your Wix website (www.zhaeng.com) so iPhone users can take photos with watermarks.
+Get the ZHAENG Camera feature working on your Wix website (www.zhaeng.net) so iPhone users can take photos with watermarks.
 
 ## Step-by-Step Setup (Easiest Method)
 
@@ -80,7 +80,7 @@ Get the ZHAENG Camera feature working on your Wix website (www.zhaeng.com) so iP
 
 1. Open Safari on your iPhone
 
-2. Go to www.zhaeng.com
+2. Go to www.zhaeng.net
 
 3. Navigate to your Camera page or click the button
 
@@ -143,4 +143,4 @@ In Wix:
 3. Open an issue on GitHub if something doesn't work
 
 ---
-**You're all set!** Your mobile camera feature should now be live on www.zhaeng.com 🎉
+**You're all set!** Your mobile camera feature should now be live on www.zhaeng.net 🎉

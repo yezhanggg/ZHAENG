@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="description" content="ZHAENG">
+    <title>ZHAENG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+            font-feature-settings: 'ss01', 'cv01';
+            background: #c9c9c9;
+            color: rgba(0, 0, 0, 0.75);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Main Content */
+        main {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            padding: 2rem;
+        }
+
+        /* Gallery Grid */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            align-items: center;
+            justify-content: center;
+            max-width: 1200px;
+        }
+
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 180px;
+            height: 180px;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
+        }
+
+        .gallery-item:active {
+            transform: translateY(-2px) scale(0.99);
+        }
+
+        .icon-wrapper {
+            font-size: 5rem;
+            opacity: 0.9;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .gallery {
+                gap: 2rem;
+            }
+
+            .gallery-item {
+                width: 140px;
+                height: 140px;
+            }
+
+            .icon-wrapper {
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                gap: 1.5rem;
+            }
+
+            .gallery-item {
+                width: 120px;
+                height: 120px;
+            }
+
+            .icon-wrapper {
+                font-size: 3.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .gallery-item {
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+        }
+
+        .gallery-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .gallery-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .gallery-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .gallery-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .gallery-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Gallery -->
+    <main>
+        <div class="container">
+            <section class="gallery">
+                <a href="features/zhaeng-camera/" class="gallery-item">
+                    <div class="icon-wrapper">📸</div>
+                </a>
+
+                <a href="features/fortune-cookie/" class="gallery-item">
+                    <div class="icon-wrapper">🥠</div>
+                </a>
+
+                <a href="features/poster-designer/" class="gallery-item">
+                    <div class="icon-wrapper">🎨</div>
+                </a>
+
+                <a href="features/image-scrambler/" class="gallery-item">
+                    <div class="icon-wrapper">🔀</div>
+                </a>
+
+                <a href="features/smart-chatbot/" class="gallery-item">
+                    <div class="icon-wrapper">🤖</div>
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Prevent pinch zoom on iOS
+        document.addEventListener('gesturestart', (e) => e.preventDefault());
+        document.addEventListener('gesturechange', (e) => e.preventDefault());
+    </script>
+</body>
+</html>

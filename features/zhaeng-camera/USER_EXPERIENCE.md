@@ -137,7 +137,7 @@ G                       G
 ## User Journey
 
 ### Step 1: Discovery
-User visits www.zhaeng.com on their iPhone
+User visits www.zhaeng.net on their iPhone
 → Sees "Camera" page or button
 → Taps to open the camera feature
 

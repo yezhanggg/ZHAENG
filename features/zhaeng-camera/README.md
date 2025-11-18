@@ -189,4 +189,4 @@ Potential features to add:
 For issues or questions, please open an issue in the GitHub repository.
 
 ---
-**ZHAENG Camera** - Created for www.zhaeng.com
+**ZHAENG Camera** - Created for www.zhaeng.net
