@@ -305,7 +305,7 @@
             </div>
             <button class="btn btn-primary" onclick="login()">Unlock Admin Panel</button>
             <p style="margin-top: 20px; color: #6b7280; font-size: 13px;">
-                Default password: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">admin123</code>
+                Your password: <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">••••</code>
             </p>
         </div>
 
@@ -383,8 +383,8 @@
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        // Correct password hash for "admin123"
-        const CORRECT_HASH = 'f865b53623b121fd34ee5426c792e5c33af8c227b8cd9999b01c6f2c77d8292e';
+        // Correct password hash for "0033"
+        const CORRECT_HASH = '052bfcbedb83a7bc346225946e335411197a2c81f9e220f6e4b3d4b939661bce';
 
         // Check if already logged in
         if (sessionStorage.getItem('admin_auth') === CORRECT_HASH) {
