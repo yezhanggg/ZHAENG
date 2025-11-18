@@ -2,42 +2,69 @@
 // Uses pattern matching, keyword extraction, and text similarity
 
 class ChatbotEngine {
-    constructor(knowledgeBase, aiIntegration = null, generativeEngine = null, githubLogger = null) {
+    constructor(knowledgeBase, aiIntegration = null, generativeEngine = null, githubLogger = null, advancedNLP = null) {
         this.knowledgeBase = knowledgeBase;
-        this.confidenceThreshold = 0.4; // Minimum similarity score to answer
+        this.confidenceThreshold = 0.35; // Lowered threshold for better matching
         this.ownerEmail = 'yezhang0033@gmail.com';
         this.aiIntegration = aiIntegration; // Optional AI fallback
         this.generativeEngine = generativeEngine; // Optional generative thinking
         this.githubLogger = githubLogger; // Optional GitHub logging
+        this.advancedNLP = advancedNLP; // Advanced NLP engine
     }
 
     // Main function to get response
     async getResponse(userQuestion) {
+        // Advanced NLP processing if available
+        let nlpData = null;
+        let enhancedQuery = userQuestion;
+
+        if (this.advancedNLP) {
+            nlpData = this.advancedNLP.process(userQuestion, this.knowledgeBase);
+            enhancedQuery = nlpData.resolved; // Use pronoun-resolved query
+        }
+
         // Preprocess the question
-        const processedQuestion = this.preprocessText(userQuestion);
+        const processedQuestion = this.preprocessText(enhancedQuery);
 
         // Find best matching question in knowledge base
-        const match = this.findBestMatch(processedQuestion, userQuestion);
+        const match = this.findBestMatch(processedQuestion, enhancedQuery, nlpData);
 
         if (match && match.confidence >= this.confidenceThreshold) {
             // Enhance answer with generative thinking
             let finalAnswer = match.answer;
 
+            // Apply advanced NLP enhancements
+            if (this.advancedNLP && nlpData) {
+                finalAnswer = this.advancedNLP.enhanceResponse(
+                    finalAnswer,
+                    userQuestion,
+                    nlpData.intent,
+                    nlpData.sentiment
+                );
+            }
+
+            // Further enhance with generative engine
             if (this.generativeEngine) {
                 const category = this.detectCategory(match.matchedQuestion);
                 finalAnswer = this.generativeEngine.enhance(
-                    match.answer,
+                    finalAnswer,
                     userQuestion,
                     match.confidence,
                     category
                 );
             }
 
+            // Add to conversation history
+            if (this.advancedNLP) {
+                this.advancedNLP.addToHistory(userQuestion, finalAnswer);
+            }
+
             return {
                 answer: finalAnswer,
                 confidence: match.confidence,
                 needsEmail: false,
-                source: 'local-enhanced'
+                source: 'local-enhanced',
+                nlpData: nlpData // Include NLP analysis for debugging
             };
         } else {
             // Try AI fallback if configured
@@ -203,12 +230,17 @@ class ChatbotEngine {
     }
 
     // Find best matching question in knowledge base
-    findBestMatch(processedQuestion, originalQuestion) {
+    findBestMatch(processedQuestion, originalQuestion, nlpData = null) {
         let bestMatch = null;
         let highestScore = 0;
 
         // Remove stop words for better matching
-        const userKeywords = this.removeStopWords(processedQuestion);
+        let userKeywords = this.removeStopWords(processedQuestion);
+
+        // Expand with synonyms if NLP is available
+        if (nlpData && this.advancedNLP) {
+            userKeywords = this.advancedNLP.expandWithSynonyms(userKeywords);
+        }
 
         for (const item of this.knowledgeBase) {
             // Process each KB question
@@ -232,12 +264,24 @@ class ChatbotEngine {
                 }
             }
 
+            // Intent bonus if NLP detected strong intent
+            let intentBonus = 0;
+            if (nlpData && nlpData.intent && nlpData.intent.confidence > 0.7) {
+                // Boost certain intent-matched questions
+                if (nlpData.intent.intent === 'greeting' && item.question.toLowerCase().includes('hello')) {
+                    intentBonus = 0.2;
+                } else if (nlpData.intent.intent.startsWith('question_') && item.question.toLowerCase().includes('what')) {
+                    intentBonus = 0.1;
+                }
+            }
+
             // Combined score with weights
             const combinedScore = (
-                jaccardScore * 0.3 +
-                cosineScore * 0.4 +
-                keywordBonus +
-                patternScore
+                jaccardScore * 0.25 +
+                cosineScore * 0.35 +
+                keywordBonus * 0.15 +
+                patternScore * 0.2 +
+                intentBonus * 0.05
             );
 
             if (combinedScore > highestScore) {

@@ -4,620 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>ZHAENG Poster Designer Pro</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-            font-feature-settings: 'ss01', 'cv01';
-            background: #c9c9c9;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Particles */
-        .particle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: float linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) translateX(0px); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
-        }
-
-        #particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        #app {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            animation: fadeInDown 0.8s ease;
-        }
-
-        header h1 {
-            color: rgba(0, 0, 0, 0.75);
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 5px;
-        }
-
-        header p {
-            color: rgba(0, 0, 0, 0.6);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Upload Section */
-        #upload-section {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        #upload-area {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(1rem);
-            -webkit-backdrop-filter: blur(1rem);
-            border-radius: 1.2rem;
-            padding: 60px 30px;
-            border: 3px dashed rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-        }
-
-        #upload-area:hover {
-            border-color: rgba(0, 0, 0, 0.4);
-            transform: translateY(-4px);
-        }
-
-        #file-input { display: none; }
-
-        /* Editor Layout */
-        #editor-section {
-            display: none;
-            max-width: 1600px;
-            margin: 0 auto;
-            gap: 15px;
-        }
-
-        #editor-section.active {
-            display: grid;
-            grid-template-columns: 250px 1fr 300px;
-        }
-
-        /* Panels */
-        .panel {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(1rem);
-            -webkit-backdrop-filter: blur(1rem);
-            border-radius: 1.2rem;
-            padding: 20px;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-        }
-
-        .panel h3 {
-            color: rgba(0, 0, 0, 0.75);
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        /* Layers Panel */
-        #layers-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
-        }
-
-        .layer-item {
-            background: rgba(255, 255, 255, 0.5);
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            padding: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .layer-item:hover {
-            border-color: rgba(0, 0, 0, 0.3);
-        }
-
-        .layer-item.active {
-            border-color: rgba(0, 0, 0, 0.75);
-            background: rgba(0, 0, 0, 0.75);
-            color: white;
-        }
-
-        .layer-text {
-            font-size: 12px;
-            font-weight: 600;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .layer-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 5px;
-        }
-
-        .layer-btn {
-            padding: 4px 8px;
-            font-size: 11px;
-            border: none;
-            border-radius: 6px;
-            background: rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .layer-item.active .layer-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        #add-layer-btn {
-            width: 100%;
-            padding: 12px;
-            border: 2px dashed rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            font-weight: 600;
-            color: rgba(0, 0, 0, 0.75);
-            transition: all 0.2s;
-        }
-
-        #add-layer-btn:hover {
-            border-color: rgba(0, 0, 0, 0.4);
-        }
-
-        /* Canvas */
-        #canvas-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 600px;
-        }
-
-        #preview-canvas {
-            max-width: 100%;
-            max-height: calc(100vh - 100px);
-            border-radius: 0.8rem;
-            cursor: crosshair;
-            filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
-        }
-
-        /* Controls Panel */
-        #controls-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
-        }
-
-        .control-section {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-        }
-
-        .control-section h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: rgba(0, 0, 0, 0.75);
-        }
-
-        /* Inputs */
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.5);
-            font-size: 14px;
-            font-weight: 500;
-            color: rgba(0, 0, 0, 0.75);
-            resize: vertical;
-        }
-
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: rgba(0, 0, 0, 0.3);
-        }
-
-        .slider-group {
-            margin-bottom: 12px;
-        }
-
-        .slider-group label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: rgba(0, 0, 0, 0.75);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 4px;
-            border-radius: 2px;
-            background: rgba(0, 0, 0, 0.1);
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.75);
-            cursor: pointer;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.75);
-            cursor: pointer;
-            border: none;
-        }
-
-        input[type="color"] {
-            width: 100%;
-            height: 40px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        /* Style Grid */
-        .style-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .style-btn {
-            padding: 10px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.5);
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .style-btn:hover {
-            border-color: rgba(0, 0, 0, 0.3);
-        }
-
-        .style-btn.active {
-            border-color: rgba(0, 0, 0, 0.75);
-            background: rgba(0, 0, 0, 0.75);
-            color: white;
-        }
-
-        /* Tools */
-        .tool-btns {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .tool-btn {
-            padding: 12px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tool-btn:hover {
-            border-color: rgba(0, 0, 0, 0.3);
-        }
-
-        .tool-btn.active {
-            border-color: rgba(0, 0, 0, 0.75);
-            background: rgba(0, 0, 0, 0.75);
-            color: white;
-        }
-
-        /* Auto Design */
-        #auto-design-btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
-        }
-
-        #auto-design-btn:hover {
-            transform: translateY(-2px);
-            filter: drop-shadow(0 6px 16px rgba(102, 126, 234, 0.4));
-        }
-
-        .design-suggestions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .suggestion-item {
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 8px;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.5);
-            transition: all 0.2s;
-        }
-
-        .suggestion-item:hover {
-            border-color: rgba(0, 0, 0, 0.3);
-            transform: scale(1.05);
-        }
-
-        .suggestion-preview {
-            width: 100%;
-            height: 80px;
-            background: #eee;
-            border-radius: 6px;
-            margin-bottom: 5px;
-        }
-
-        .suggestion-name {
-            font-size: 11px;
-            font-weight: 600;
-            text-align: center;
-            color: rgba(0, 0, 0, 0.75);
-        }
-
-        /* Action Buttons */
-        .action-btns {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        #save-btn {
-            background: rgba(0, 0, 0, 0.75);
-            color: white;
-        }
-
-        #new-btn {
-            background: rgba(255, 255, 255, 0.5);
-            color: rgba(0, 0, 0, 0.75);
-        }
-
-        /* Crop Overlay */
-        #crop-overlay {
-            display: none;
-            position: absolute;
-            border: 2px solid #fff;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
-            cursor: move;
-        }
-
-        .crop-handle {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border: 2px solid #000;
-            border-radius: 50%;
-        }
-
-        .crop-handle.tl { top: -6px; left: -6px; cursor: nw-resize; }
-        .crop-handle.tr { top: -6px; right: -6px; cursor: ne-resize; }
-        .crop-handle.bl { bottom: -6px; left: -6px; cursor: sw-resize; }
-        .crop-handle.br { bottom: -6px; right: -6px; cursor: se-resize; }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            #editor-section.active {
-                grid-template-columns: 1fr;
-            }
-            #layers-panel, #controls-panel {
-                max-height: none;
-            }
-        }
-
-        .hidden { display: none !important; }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Poster Designer - ZHAENG</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Background particles -->
     <div id="particles"></div>
 
     <div id="app">
-        <header>
-            <h1>ZHAENG POSTER DESIGNER PRO</h1>
-            <p>Advanced poster creation with AI-powered auto-design</p>
-        </header>
-
-        <!-- Upload -->
-        <div id="upload-section">
-            <div id="upload-area">
-                <div style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">Upload Background Image</div>
-                <div style="font-size: 14px; color: rgba(0, 0, 0, 0.5);">Click or drag & drop</div>
-            </div>
-            <input type="file" id="file-input" accept="image/*">
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <span class="emoji">🎨</span>
+            <button id="start-btn">DESIGN</button>
         </div>
 
-        <!-- Editor -->
-        <div id="editor-section">
-            <!-- Layers Panel -->
-            <div class="panel">
-                <h3>
-                    Layers
-                    <span style="font-size: 12px; font-weight: 500;" id="layer-count">0</span>
-                </h3>
-                <div id="layers-list"></div>
-                <button id="add-layer-btn">+ Add Text Layer</button>
-            </div>
-
-            <!-- Canvas -->
-            <div class="panel" id="canvas-container">
-                <canvas id="preview-canvas"></canvas>
-                <div id="crop-overlay">
-                    <div class="crop-handle tl"></div>
-                    <div class="crop-handle tr"></div>
-                    <div class="crop-handle bl"></div>
-                    <div class="crop-handle br"></div>
+        <!-- Main View -->
+        <div id="main-view" class="hidden">
+            <!-- Upload Section -->
+            <div id="upload-section">
+                <div id="upload-area">
+                    <div class="upload-text">Drop image or tap to upload</div>
+                    <input type="file" id="file-input" accept="image/*" hidden>
                 </div>
             </div>
 
-            <!-- Controls -->
-            <div class="panel">
-                <h3>Controls</h3>
-                <div id="controls-panel">
-                    <!-- Image Tools -->
-                    <div class="control-section">
-                        <h4>Image Tools</h4>
-                        <div class="tool-btns">
-                            <button class="tool-btn" id="crop-btn">Crop</button>
-                            <button class="tool-btn" id="apply-crop-btn" style="display:none;">Apply Crop</button>
-                        </div>
-                        <div class="slider-group" style="margin-top: 10px;">
-                            <label>Curve <span id="curve-value">0</span></label>
-                            <input type="range" id="curve-slider" min="-50" max="50" value="0">
-                        </div>
-                    </div>
+            <!-- Editor -->
+            <div id="editor-section" class="hidden">
+                <!-- Layers Panel -->
+                <div class="panel">
+                    <h3>
+                        Layers
+                        <span class="layer-count" id="layer-count">0</span>
+                    </h3>
+                    <div id="layers-list"></div>
+                    <button id="add-layer-btn" class="add-layer-btn">+ Add Text Layer</button>
+                </div>
 
-                    <!-- Text Editor -->
-                    <div class="control-section" id="text-controls">
-                        <h4>Text</h4>
-                        <textarea id="text-input" placeholder="Enter text..." rows="2">YOUR TEXT</textarea>
+                <!-- Canvas -->
+                <div class="panel canvas-panel" id="canvas-container">
+                    <canvas id="preview-canvas"></canvas>
+                    <div id="crop-overlay" class="hidden">
+                        <div class="crop-handle tl"></div>
+                        <div class="crop-handle tr"></div>
+                        <div class="crop-handle bl"></div>
+                        <div class="crop-handle br"></div>
                     </div>
+                </div>
 
-                    <!-- Style -->
-                    <div class="control-section">
-                        <h4>Style</h4>
-                        <div class="style-grid">
-                            <button class="style-btn active" data-style="impact">IMPACT</button>
-                            <button class="style-btn" data-style="neon">NEON</button>
-                            <button class="style-btn" data-style="graffiti">GRAFFITI</button>
-                            <button class="style-btn" data-style="retro">RETRO</button>
-                            <button class="style-btn" data-style="brutalist">BRUTAL</button>
-                            <button class="style-btn" data-style="pop3d">3D POP</button>
-                            <button class="style-btn" data-style="glitch">GLITCH</button>
-                            <button class="style-btn" data-style="stencil">STENCIL</button>
-                            <button class="style-btn" data-style="outline">OUTLINE</button>
-                            <button class="style-btn" data-style="shadow">SHADOW</button>
-                            <button class="style-btn" data-style="vintage">VINTAGE</button>
-                            <button class="style-btn" data-style="marker">MARKER</button>
+                <!-- Controls -->
+                <div class="panel">
+                    <h3>Controls</h3>
+                    <div id="controls-panel">
+                        <!-- Image Tools -->
+                        <div class="control-section">
+                            <h4>Image Tools</h4>
+                            <div class="tool-btns">
+                                <button class="tool-btn" id="crop-btn">Crop</button>
+                                <button class="tool-btn" id="apply-crop-btn" style="display:none;">Apply</button>
+                            </div>
+                            <div class="slider-group" style="margin-top: 10px;">
+                                <label>Curve <span id="curve-value">0</span></label>
+                                <input type="range" id="curve-slider" min="-50" max="50" value="0">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Size & Position -->
-                    <div class="control-section">
-                        <h4>Transform</h4>
-                        <div class="slider-group">
-                            <label>Size <span id="size-value">80</span></label>
-                            <input type="range" id="size-slider" min="20" max="200" value="80">
+                        <!-- Text Editor -->
+                        <div class="control-section" id="text-controls">
+                            <h4>Text</h4>
+                            <textarea id="text-input" placeholder="Enter text..." rows="2">YOUR TEXT</textarea>
                         </div>
-                        <div class="slider-group">
-                            <label>X Position <span id="x-value">50</span>%</label>
-                            <input type="range" id="x-slider" min="0" max="100" value="50">
-                        </div>
-                        <div class="slider-group">
-                            <label>Y Position <span id="y-value">50</span>%</label>
-                            <input type="range" id="y-slider" min="0" max="100" value="50">
-                        </div>
-                        <div class="slider-group">
-                            <label>Rotation <span id="rotation-value">0</span>°</label>
-                            <input type="range" id="rotation-slider" min="-180" max="180" value="0">
-                        </div>
-                        <div class="slider-group">
-                            <label>Color</label>
-                            <input type="color" id="color-picker" value="#ffffff">
-                        </div>
-                    </div>
 
-                    <!-- AI Auto Design -->
-                    <div class="control-section">
-                        <h4>AI Auto Design</h4>
-                        <button id="auto-design-btn">✨ Generate Designs</button>
-                        <div id="design-suggestions" class="design-suggestions hidden"></div>
-                    </div>
+                        <!-- Style -->
+                        <div class="control-section">
+                            <h4>Style</h4>
+                            <div class="style-grid">
+                                <button class="style-btn active" data-style="impact">IMPACT</button>
+                                <button class="style-btn" data-style="neon">NEON</button>
+                                <button class="style-btn" data-style="graffiti">GRAFFITI</button>
+                                <button class="style-btn" data-style="retro">RETRO</button>
+                                <button class="style-btn" data-style="brutalist">BRUTAL</button>
+                                <button class="style-btn" data-style="pop3d">3D POP</button>
+                                <button class="style-btn" data-style="glitch">GLITCH</button>
+                                <button class="style-btn" data-style="stencil">STENCIL</button>
+                                <button class="style-btn" data-style="outline">OUTLINE</button>
+                                <button class="style-btn" data-style="shadow">SHADOW</button>
+                                <button class="style-btn" data-style="vintage">VINTAGE</button>
+                                <button class="style-btn" data-style="marker">MARKER</button>
+                            </div>
+                        </div>
 
-                    <!-- Actions -->
-                    <div class="control-section">
-                        <div class="action-btns">
-                            <button id="new-btn" class="action-btn">New</button>
-                            <button id="save-btn" class="action-btn">Save</button>
+                        <!-- Size & Position -->
+                        <div class="control-section">
+                            <h4>Transform</h4>
+                            <div class="slider-group">
+                                <label>Size <span id="size-value">80</span></label>
+                                <input type="range" id="size-slider" min="20" max="200" value="80">
+                            </div>
+                            <div class="slider-group">
+                                <label>X Position <span id="x-value">50</span>%</label>
+                                <input type="range" id="x-slider" min="0" max="100" value="50">
+                            </div>
+                            <div class="slider-group">
+                                <label>Y Position <span id="y-value">50</span>%</label>
+                                <input type="range" id="y-slider" min="0" max="100" value="50">
+                            </div>
+                            <div class="slider-group">
+                                <label>Rotation <span id="rotation-value">0</span>°</label>
+                                <input type="range" id="rotation-slider" min="-180" max="180" value="0">
+                            </div>
+                            <div class="slider-group">
+                                <label>Color</label>
+                                <input type="color" id="color-picker" value="#ffffff">
+                            </div>
+                        </div>
+
+                        <!-- AI Auto Design -->
+                        <div class="control-section">
+                            <h4>AI Auto Design</h4>
+                            <button id="auto-design-btn" class="auto-design-btn">✨ Generate Designs</button>
+                            <div id="design-suggestions" class="design-suggestions hidden"></div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="control-section">
+                            <div class="action-btns">
+                                <button id="new-btn" class="action-btn">New</button>
+                                <button id="save-btn" class="action-btn save-btn">Save</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -625,563 +139,6 @@
         </div>
     </div>
 
-    <script>
-        // Create particles
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.top = '100%';
-                p.style.animationDelay = Math.random() * 5 + 's';
-                p.style.animationDuration = (Math.random() * 10 + 15) + 's';
-                const size = Math.random() * 8 + 4;
-                p.style.width = size + 'px';
-                p.style.height = size + 'px';
-                container.appendChild(p);
-            }
-        }
-        createParticles();
-
-        // State
-        let uploadedImage = null;
-        let originalImage = null;
-        let textLayers = [];
-        let activeLayerId = null;
-        let curveAmount = 0;
-        let cropMode = false;
-        let cropArea = { x: 0, y: 0, width: 0, height: 0 };
-
-        // Elements
-        const uploadArea = document.getElementById('upload-area');
-        const fileInput = document.getElementById('file-input');
-        const uploadSection = document.getElementById('upload-section');
-        const editorSection = document.getElementById('editor-section');
-        const canvas = document.getElementById('preview-canvas');
-        const ctx = canvas.getContext('2d');
-        const layersList = document.getElementById('layers-list');
-        const addLayerBtn = document.getElementById('add-layer-btn');
-        const textInput = document.getElementById('text-input');
-        const styleButtons = document.querySelectorAll('.style-btn');
-        const sizeSlider = document.getElementById('size-slider');
-        const xSlider = document.getElementById('x-slider');
-        const ySlider = document.getElementById('y-slider');
-        const rotationSlider = document.getElementById('rotation-slider');
-        const colorPicker = document.getElementById('color-picker');
-        const curveSlider = document.getElementById('curve-slider');
-        const cropBtn = document.getElementById('crop-btn');
-        const applyCropBtn = document.getElementById('apply-crop-btn');
-        const autoDesignBtn = document.getElementById('auto-design-btn');
-        const saveBtn = document.getElementById('save-btn');
-        const newBtn = document.getElementById('new-btn');
-
-        // Upload
-        uploadArea.addEventListener('click', () => fileInput.click());
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'rgba(0,0,0,0.4)';
-        });
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = 'rgba(0,0,0,0.2)';
-        });
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const file = e.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) loadImage(file);
-        });
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files[0]) loadImage(e.target.files[0]);
-        });
-
-        function loadImage(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    originalImage = img;
-                    uploadedImage = img;
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    cropArea = { x: 0, y: 0, width: img.width, height: img.height };
-                    uploadSection.classList.add('hidden');
-                    editorSection.classList.add('active');
-                    addTextLayer();
-                    render();
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Layer Management
-        function addTextLayer() {
-            const layer = {
-                id: Date.now(),
-                text: 'YOUR TEXT',
-                style: 'impact',
-                size: 80,
-                x: 50,
-                y: 50,
-                rotation: 0,
-                color: '#ffffff'
-            };
-            textLayers.push(layer);
-            activeLayerId = layer.id;
-            updateLayersList();
-            updateControls();
-            render();
-        }
-
-        function updateLayersList() {
-            layersList.innerHTML = '';
-            textLayers.forEach((layer, index) => {
-                const div = document.createElement('div');
-                div.className = 'layer-item' + (layer.id === activeLayerId ? ' active' : '');
-                div.innerHTML = `
-                    <div class="layer-text">${layer.text || 'Empty'}</div>
-                    <div class="layer-actions">
-                        <button class="layer-btn" onclick="selectLayer(${layer.id})">Edit</button>
-                        <button class="layer-btn" onclick="deleteLayer(${layer.id})">Delete</button>
-                    </div>
-                `;
-                layersList.appendChild(div);
-            });
-            document.getElementById('layer-count').textContent = textLayers.length;
-        }
-
-        window.selectLayer = (id) => {
-            activeLayerId = id;
-            updateLayersList();
-            updateControls();
-        };
-
-        window.deleteLayer = (id) => {
-            textLayers = textLayers.filter(l => l.id !== id);
-            if (activeLayerId === id) activeLayerId = textLayers[0]?.id || null;
-            updateLayersList();
-            updateControls();
-            render();
-        };
-
-        function getActiveLayer() {
-            return textLayers.find(l => l.id === activeLayerId);
-        }
-
-        function updateControls() {
-            const layer = getActiveLayer();
-            if (!layer) return;
-            textInput.value = layer.text;
-            sizeSlider.value = layer.size;
-            xSlider.value = layer.x;
-            ySlider.value = layer.y;
-            rotationSlider.value = layer.rotation;
-            colorPicker.value = layer.color;
-            document.getElementById('size-value').textContent = layer.size;
-            document.getElementById('x-value').textContent = layer.x;
-            document.getElementById('y-value').textContent = layer.y;
-            document.getElementById('rotation-value').textContent = layer.rotation;
-            styleButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.style === layer.style);
-            });
-        }
-
-        // Controls
-        addLayerBtn.addEventListener('click', addTextLayer);
-
-        textInput.addEventListener('input', (e) => {
-            const layer = getActiveLayer();
-            if (layer) {
-                layer.text = e.target.value;
-                updateLayersList();
-                render();
-            }
-        });
-
-        styleButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const layer = getActiveLayer();
-                if (layer) {
-                    layer.style = btn.dataset.style;
-                    updateControls();
-                    render();
-                }
-            });
-        });
-
-        sizeSlider.addEventListener('input', (e) => {
-            const layer = getActiveLayer();
-            if (layer) {
-                layer.size = parseInt(e.target.value);
-                document.getElementById('size-value').textContent = layer.size;
-                render();
-            }
-        });
-
-        xSlider.addEventListener('input', (e) => {
-            const layer = getActiveLayer();
-            if (layer) {
-                layer.x = parseInt(e.target.value);
-                document.getElementById('x-value').textContent = layer.x;
-                render();
-            }
-        });
-
-        ySlider.addEventListener('input', (e) => {
-            const layer = getActiveLayer();
-            if (layer) {
-                layer.y = parseInt(e.target.value);
-                document.getElementById('y-value').textContent = layer.y;
-                render();
-            }
-        });
-
-        rotationSlider.addEventListener('input', (e) => {
-            const layer = getActiveLayer();
-            if (layer) {
-                layer.rotation = parseInt(e.target.value);
-                document.getElementById('rotation-value').textContent = layer.rotation;
-                render();
-            }
-        });
-
-        colorPicker.addEventListener('input', (e) => {
-            const layer = getActiveLayer();
-            if (layer) {
-                layer.color = e.target.value;
-                render();
-            }
-        });
-
-        curveSlider.addEventListener('input', (e) => {
-            curveAmount = parseInt(e.target.value);
-            document.getElementById('curve-value').textContent = curveAmount;
-            render();
-        });
-
-        // Crop
-        cropBtn.addEventListener('click', () => {
-            cropMode = !cropMode;
-            cropBtn.classList.toggle('active');
-            applyCropBtn.style.display = cropMode ? 'block' : 'none';
-            document.getElementById('crop-overlay').style.display = cropMode ? 'block' : 'none';
-            if (cropMode) {
-                const rect = canvas.getBoundingClientRect();
-                const overlay = document.getElementById('crop-overlay');
-                overlay.style.left = rect.width * 0.1 + 'px';
-                overlay.style.top = rect.height * 0.1 + 'px';
-                overlay.style.width = rect.width * 0.8 + 'px';
-                overlay.style.height = rect.height * 0.8 + 'px';
-            }
-        });
-
-        applyCropBtn.addEventListener('click', () => {
-            // Apply crop transformation
-            const overlay = document.getElementById('crop-overlay');
-            const canvasRect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / canvasRect.width;
-            const scaleY = canvas.height / canvasRect.height;
-
-            cropArea = {
-                x: parseInt(overlay.style.left) * scaleX,
-                y: parseInt(overlay.style.top) * scaleY,
-                width: parseInt(overlay.style.width) * scaleX,
-                height: parseInt(overlay.style.height) * scaleY
-            };
-
-            cropMode = false;
-            cropBtn.classList.remove('active');
-            applyCropBtn.style.display = 'none';
-            document.getElementById('crop-overlay').style.display = 'none';
-            render();
-        });
-
-        // Auto Design AI
-        autoDesignBtn.addEventListener('click', generateDesigns);
-
-        function generateDesigns() {
-            // Analyze image
-            const analysis = analyzeImage();
-
-            // Generate 4 design suggestions
-            const designs = [
-                {
-                    name: 'Bold Center',
-                    layers: [{
-                        text: 'BOLD TEXT',
-                        style: 'impact',
-                        size: 120,
-                        x: 50,
-                        y: 50,
-                        rotation: 0,
-                        color: analysis.contrastColor
-                    }]
-                },
-                {
-                    name: 'Top Banner',
-                    layers: [{
-                        text: 'HEADER TEXT',
-                        style: 'retro',
-                        size: 80,
-                        x: 50,
-                        y: 15,
-                        rotation: 0,
-                        color: analysis.accentColor
-                    }]
-                },
-                {
-                    name: 'Diagonal',
-                    layers: [{
-                        text: 'ANGLED',
-                        style: 'neon',
-                        size: 100,
-                        x: 50,
-                        y: 50,
-                        rotation: -15,
-                        color: analysis.brightColor
-                    }]
-                },
-                {
-                    name: 'Bottom Punch',
-                    layers: [{
-                        text: 'IMPACT TEXT',
-                        style: 'pop3d',
-                        size: 90,
-                        x: 50,
-                        y: 85,
-                        rotation: 0,
-                        color: '#ffffff'
-                    }]
-                }
-            ];
-
-            showDesignSuggestions(designs);
-        }
-
-        function analyzeImage() {
-            // Sample pixels to determine dominant colors and brightness
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = 100;
-            tempCanvas.height = 100;
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCtx.drawImage(uploadedImage, 0, 0, 100, 100);
-            const imageData = tempCtx.getImageData(0, 0, 100, 100);
-
-            let totalR = 0, totalG = 0, totalB = 0;
-            for (let i = 0; i < imageData.data.length; i += 4) {
-                totalR += imageData.data[i];
-                totalG += imageData.data[i + 1];
-                totalB += imageData.data[i + 2];
-            }
-            const pixels = imageData.data.length / 4;
-            const avgR = totalR / pixels;
-            const avgG = totalG / pixels;
-            const avgB = totalB / pixels;
-            const brightness = (avgR + avgG + avgB) / 3;
-
-            return {
-                contrastColor: brightness > 128 ? '#000000' : '#ffffff',
-                accentColor: brightness > 128 ? '#ff00ff' : '#00ffff',
-                brightColor: '#ffff00',
-                isDark: brightness < 128
-            };
-        }
-
-        function showDesignSuggestions(designs) {
-            const container = document.getElementById('design-suggestions');
-            container.classList.remove('hidden');
-            container.innerHTML = '';
-
-            designs.forEach(design => {
-                const div = document.createElement('div');
-                div.className = 'suggestion-item';
-                div.innerHTML = `
-                    <div class="suggestion-preview"></div>
-                    <div class="suggestion-name">${design.name}</div>
-                `;
-                div.onclick = () => applyDesign(design);
-                container.appendChild(div);
-            });
-        }
-
-        function applyDesign(design) {
-            textLayers = design.layers.map(l => ({...l, id: Date.now() + Math.random()}));
-            activeLayerId = textLayers[0].id;
-            updateLayersList();
-            updateControls();
-            render();
-        }
-
-        // Render
-        function applyTextStyle(ctx, style, size, color) {
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = `900 ${size}px 'Arial Black', Arial, sans-serif`;
-
-            switch(style) {
-                case 'impact':
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = size * 0.08;
-                    ctx.fillStyle = color;
-                    break;
-                case 'neon':
-                    ctx.fillStyle = color;
-                    ctx.shadowColor = color;
-                    ctx.shadowBlur = size * 0.3;
-                    break;
-                case 'graffiti':
-                    ctx.font = `900 italic ${size}px 'Arial Black'`;
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = size * 0.05;
-                    ctx.fillStyle = color;
-                    ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                    ctx.shadowBlur = size * 0.1;
-                    ctx.shadowOffsetY = size * 0.05;
-                    break;
-                case 'retro':
-                    const gradient = ctx.createLinearGradient(0, 0, 0, size);
-                    gradient.addColorStop(0, '#ff00ff');
-                    gradient.addColorStop(0.5, color);
-                    gradient.addColorStop(1, '#00ffff');
-                    ctx.fillStyle = gradient;
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = size * 0.03;
-                    ctx.shadowColor = color;
-                    ctx.shadowBlur = size * 0.2;
-                    break;
-                case 'brutalist':
-                    ctx.font = `900 ${size}px monospace`;
-                    ctx.fillStyle = color;
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = size * 0.1;
-                    break;
-                case 'pop3d':
-                    ctx.fillStyle = color;
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = size * 0.05;
-                    break;
-                case 'glitch':
-                    ctx.fillStyle = color;
-                    break;
-                case 'stencil':
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = size * 0.15;
-                    break;
-                case 'outline':
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = size * 0.08;
-                    break;
-                case 'shadow':
-                    ctx.fillStyle = color;
-                    ctx.shadowColor = 'rgba(0,0,0,0.8)';
-                    ctx.shadowBlur = size * 0.05;
-                    ctx.shadowOffsetX = size * 0.1;
-                    ctx.shadowOffsetY = size * 0.1;
-                    break;
-                case 'vintage':
-                    ctx.fillStyle = color;
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = size * 0.04;
-                    break;
-                case 'marker':
-                    ctx.font = `900 ${size}px 'Comic Sans MS', cursive`;
-                    ctx.fillStyle = color;
-                    ctx.strokeStyle = '#000';
-                    ctx.lineWidth = size * 0.06;
-                    break;
-            }
-        }
-
-        function render() {
-            if (!uploadedImage) return;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Apply curve/warp to image
-            if (curveAmount !== 0) {
-                const strength = curveAmount / 100;
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-
-                for (let y = 0; y < canvas.height; y += 2) {
-                    for (let x = 0; x < canvas.width; x += 2) {
-                        const dx = x - centerX;
-                        const dy = y - centerY;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        const maxDist = Math.sqrt(centerX * centerX + centerY * centerY);
-                        const factor = 1 + (dist / maxDist) * strength;
-
-                        const sx = centerX + dx * factor;
-                        const sy = centerY + dy * factor;
-
-                        if (sx >= 0 && sx < canvas.width && sy >= 0 && sy < canvas.height) {
-                            ctx.drawImage(uploadedImage, sx, sy, 2, 2, x, y, 2, 2);
-                        }
-                    }
-                }
-            } else {
-                ctx.drawImage(uploadedImage, cropArea.x, cropArea.y, cropArea.width, cropArea.height, 0, 0, canvas.width, canvas.height);
-            }
-
-            // Draw all text layers
-            textLayers.forEach(layer => {
-                const x = (layer.x / 100) * canvas.width;
-                const y = (layer.y / 100) * canvas.height;
-
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(layer.rotation * Math.PI / 180);
-
-                applyTextStyle(ctx, layer.style, layer.size, layer.color);
-
-                const lines = layer.text.split('\n');
-                const lineHeight = layer.size * 1.2;
-                const startY = -(lines.length - 1) * lineHeight / 2;
-
-                lines.forEach((line, i) => {
-                    const ly = startY + (i * lineHeight);
-
-                    if (layer.style === 'pop3d') {
-                        for (let j = 8; j > 0; j--) {
-                            ctx.fillStyle = `rgba(0,0,0,${0.1 * j})`;
-                            ctx.fillText(line, -j * 2, ly + j * 2);
-                        }
-                        ctx.fillStyle = layer.color;
-                        ctx.fillText(line, 0, ly);
-                        ctx.strokeText(line, 0, ly);
-                    } else if (layer.style === 'glitch') {
-                        ctx.fillStyle = '#ff00ff';
-                        ctx.fillText(line, -4, ly);
-                        ctx.fillStyle = '#00ffff';
-                        ctx.fillText(line, 4, ly);
-                        ctx.fillStyle = layer.color;
-                        ctx.fillText(line, 0, ly);
-                    } else if (layer.style === 'stencil' || layer.style === 'outline') {
-                        ctx.strokeText(line, 0, ly);
-                    } else {
-                        if (ctx.lineWidth > 0) ctx.strokeText(line, 0, ly);
-                        ctx.fillText(line, 0, ly);
-                    }
-                });
-
-                ctx.restore();
-            });
-        }
-
-        // Actions
-        saveBtn.addEventListener('click', () => {
-            const link = document.createElement('a');
-            link.download = `ZHAENG_Poster_${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
-
-        newBtn.addEventListener('click', () => {
-            if (confirm('Start new poster?')) location.reload();
-        });
-
-        document.addEventListener('gesturestart', (e) => e.preventDefault());
-        document.addEventListener('gesturechange', (e) => e.preventDefault());
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

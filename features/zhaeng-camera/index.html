@@ -79,6 +79,45 @@
             align-items: center;
             gap: 20px;
             z-index: 10;
+            flex-wrap: wrap;
+        }
+
+        /* Photo Count Selector */
+        #photo-count-selector {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(1rem);
+            -webkit-backdrop-filter: blur(1rem);
+            padding: 6px;
+            border-radius: 50px;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+        }
+
+        .count-option {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 50px;
+            color: rgba(0, 0, 0, 0.6);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .count-option:hover {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .count-option.active {
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
         }
 
         .btn {
@@ -471,6 +510,12 @@
             <canvas id="canvas"></canvas>
             <div id="status" class="hidden"></div>
 
+            <!-- Photo Count Selector -->
+            <div id="photo-count-selector">
+                <button class="count-option" data-count="1">1</button>
+                <button class="count-option active" data-count="4">4</button>
+            </div>
+
             <div id="controls">
                 <button id="flip-btn" class="btn">FLIP</button>
                 <button id="capture-btn" class="btn"></button>
@@ -540,8 +585,9 @@
         let currentFilter = 'none';
         let watermarkColor = { r: 255, g: 255, b: 255 }; // Default white
         let originalImageData = null;
-        let capturedPhotos = []; // Store 4 photos
+        let capturedPhotos = []; // Store photos
         let isCapturing = false;
+        let photoCount = 4; // Default to 4 photos
 
         // Create background particles
         function createParticles() {
@@ -585,6 +631,7 @@
         const closeColorBtn = document.getElementById('close-color');
         const filterOptions = document.querySelectorAll('.filter-option');
         const colorOptions = document.querySelectorAll('.color-option');
+        const countOptions = document.querySelectorAll('.count-option');
 
         // Show status message
         function showStatus(message) {
@@ -908,7 +955,7 @@
             countdownEl.classList.add('hidden');
         }
 
-        // Capture 4 photos in sequence
+        // Capture photos in sequence
         async function capturePhoto() {
             if (isCapturing) return;
 
@@ -916,15 +963,15 @@
             capturedPhotos = [];
 
             try {
-                // Capture 4 photos with countdown
-                for (let i = 0; i < 4; i++) {
+                // Capture photos with countdown based on selected count
+                for (let i = 0; i < photoCount; i++) {
                     await showCountdown(i + 1);
                     const photo = captureSingleFrame();
                     capturedPhotos.push(photo);
                     await new Promise(resolve => setTimeout(resolve, 200));
                 }
 
-                // Create combined 2x2 grid image
+                // Create combined grid image (or single image)
                 createPhotoGrid();
 
                 // Switch to preview view
@@ -938,9 +985,9 @@
             }
         }
 
-        // Create 2x2 photo grid
+        // Create photo grid or single image
         function createPhotoGrid() {
-            // Load all 4 images first
+            // Load all images first
             const imagePromises = capturedPhotos.map(dataUrl => {
                 return new Promise((resolve) => {
                     const img = new Image();
@@ -952,23 +999,29 @@
             Promise.all(imagePromises).then(images => {
                 const singleWidth = images[0].width;
                 const singleHeight = images[0].height;
-
-                // Create 2x2 grid
-                canvas.width = singleWidth * 2;
-                canvas.height = singleHeight * 2;
-
                 const ctx = canvas.getContext('2d');
 
-                // Draw 4 images in 2x2 grid
-                ctx.drawImage(images[0], 0, 0, singleWidth, singleHeight);
-                ctx.drawImage(images[1], singleWidth, 0, singleWidth, singleHeight);
-                ctx.drawImage(images[2], 0, singleHeight, singleWidth, singleHeight);
-                ctx.drawImage(images[3], singleWidth, singleHeight, singleWidth, singleHeight);
+                if (photoCount === 1) {
+                    // Single photo mode
+                    canvas.width = singleWidth;
+                    canvas.height = singleHeight;
+                    ctx.drawImage(images[0], 0, 0, singleWidth, singleHeight);
+                } else {
+                    // 4-photo grid mode (2x2)
+                    canvas.width = singleWidth * 2;
+                    canvas.height = singleHeight * 2;
 
-                // Store original grid image data (before watermark)
+                    // Draw 4 images in 2x2 grid
+                    ctx.drawImage(images[0], 0, 0, singleWidth, singleHeight);
+                    ctx.drawImage(images[1], singleWidth, 0, singleWidth, singleHeight);
+                    ctx.drawImage(images[2], 0, singleHeight, singleWidth, singleHeight);
+                    ctx.drawImage(images[3], singleWidth, singleHeight, singleWidth, singleHeight);
+                }
+
+                // Store original image data (before watermark)
                 originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-                // Add watermark over entire grid
+                // Add watermark
                 drawWatermark(ctx, canvas.width, canvas.height);
 
                 // Reset filter
@@ -1094,6 +1147,18 @@
                 updateImage();
                 // Close modal
                 colorSelector.classList.add('hidden');
+            });
+        });
+
+        // Photo count selection
+        countOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove active class from all
+                countOptions.forEach(opt => opt.classList.remove('active'));
+                // Add active class to selected
+                option.classList.add('active');
+                // Update photo count
+                photoCount = parseInt(option.dataset.count);
             });
         });
 

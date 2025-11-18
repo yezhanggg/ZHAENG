@@ -1514,4 +1514,364 @@ const knowledgeBase = [
         answer: "That's fantastic! You should be proud. What did you accomplish?",
         patterns: ["accomplished", "achievement"]
     },
+
+    // ==================== SLANG & INFORMAL LANGUAGE ====================
+    {
+        question: "What's the tea",
+        answer: "Looking for some gossip or news? I'm all ears! What do you want to know?",
+        patterns: ["what'?s the tea", "spill the tea", "tea"]
+    },
+    {
+        question: "No cap",
+        answer: "For real! I'm being honest with you.",
+        patterns: ["no cap", "nocap"]
+    },
+    {
+        question: "Bet",
+        answer: "Sounds good! I'm on board with that.",
+        patterns: ["^bet$", "^bet\\b"]
+    },
+    {
+        question: "Facts",
+        answer: "Absolutely true! You're speaking facts right now.",
+        patterns: ["^facts$", "^fax$"]
+    },
+    {
+        question: "Slay",
+        answer: "You're absolutely crushing it! Keep being awesome!",
+        patterns: ["slay", "slaying"]
+    },
+    {
+        question: "Vibe check",
+        answer: "The vibe is good! How are you feeling today?",
+        patterns: ["vibe check", "vibes"]
+    },
+    {
+        question: "Lowkey",
+        answer: "I hear you - sometimes we feel things quietly without making a big deal.",
+        patterns: ["lowkey", "low key"]
+    },
+    {
+        question: "Highkey",
+        answer: "Absolutely and obviously! No hiding those feelings!",
+        patterns: ["highkey", "high key"]
+    },
+    {
+        question: "Salty",
+        answer: "Feeling a bit upset or annoyed? That's totally normal. Want to talk about it?",
+        patterns: ["salty", "being salty"]
+    },
+    {
+        question: "Lit",
+        answer: "That's awesome! Sounds like something exciting is happening!",
+        patterns: ["\\blit\\b", "this is lit"]
+    },
+    {
+        question: "Fire emoji",
+        answer: "That's fire! 🔥 Really cool and impressive!",
+        patterns: ["fire", "🔥", "that.*fire"]
+    },
+    {
+        question: "Sus",
+        answer: "Suspicious, right? Trust your instincts if something feels off.",
+        patterns: ["\\bsus\\b", "suspicious", "that's sus"]
+    },
+    {
+        question: "Goat",
+        answer: "Greatest Of All Time! That's high praise!",
+        patterns: ["\\bgoat\\b", "the goat"]
+    },
+    {
+        question: "Flex",
+        answer: "Showing off a bit? That's cool! Share what you're proud of!",
+        patterns: ["flex", "flexing"]
+    },
+    {
+        question: "Mood",
+        answer: "I totally get that feeling! Relatable.",
+        patterns: ["^mood$", "big mood"]
+    },
+    {
+        question: "Oof",
+        answer: "Yeah, that's rough. Hope things get better!",
+        patterns: ["^oof$", "oof size"]
+    },
+    {
+        question: "Yeet",
+        answer: "Throwing it with enthusiasm! That's the spirit!",
+        patterns: ["yeet", "yeeted"]
+    },
+    {
+        question: "Bruh",
+        answer: "I know, right? Sometimes you just gotta say bruh.",
+        patterns: ["^bruh$", "bruh moment"]
+    },
+    {
+        question: "Fam",
+        answer: "What's up, fam? I'm here for you!",
+        patterns: ["\\bfam\\b", "hey fam"]
+    },
+    {
+        question: "Sis",
+        answer: "Hey sis! How can I help you today?",
+        patterns: ["\\bsis\\b", "hey sis"]
+    },
+
+    // ==================== COMMON ABBREVIATIONS ====================
+    {
+        question: "What does lol mean",
+        answer: "LOL means 'Laughing Out Loud' - used when something is funny!",
+        patterns: ["lol", "what.*lol"]
+    },
+    {
+        question: "What does brb mean",
+        answer: "BRB means 'Be Right Back' - telling someone you'll return soon!",
+        patterns: ["brb", "what.*brb"]
+    },
+    {
+        question: "What does omg mean",
+        answer: "OMG means 'Oh My God' - expressing surprise or shock!",
+        patterns: ["omg", "what.*omg"]
+    },
+    {
+        question: "What does tbh mean",
+        answer: "TBH means 'To Be Honest' - being frank and truthful!",
+        patterns: ["tbh", "what.*tbh", "to be honest"]
+    },
+    {
+        question: "What does imo mean",
+        answer: "IMO means 'In My Opinion' - sharing your personal view!",
+        patterns: ["imo", "imho", "what.*imo"]
+    },
+    {
+        question: "What does fyi mean",
+        answer: "FYI means 'For Your Information' - sharing useful info!",
+        patterns: ["fyi", "what.*fyi"]
+    },
+    {
+        question: "What does idk mean",
+        answer: "IDK means 'I Don't Know' - admitting uncertainty!",
+        patterns: ["idk", "what.*idk", "i don'?t know"]
+    },
+    {
+        question: "What does ikr mean",
+        answer: "IKR means 'I Know, Right?' - agreeing enthusiastically!",
+        patterns: ["ikr", "what.*ikr", "i know right"]
+    },
+    {
+        question: "What does smh mean",
+        answer: "SMH means 'Shaking My Head' - expressing disappointment or disbelief!",
+        patterns: ["smh", "what.*smh"]
+    },
+    {
+        question: "What does tl;dr mean",
+        answer: "TL;DR means 'Too Long; Didn't Read' - a summary of long text!",
+        patterns: ["tl;?dr", "what.*tldr"]
+    },
+    {
+        question: "What does afk mean",
+        answer: "AFK means 'Away From Keyboard' - stepping away from the computer!",
+        patterns: ["afk", "what.*afk"]
+    },
+    {
+        question: "What does btw mean",
+        answer: "BTW means 'By The Way' - adding extra information!",
+        patterns: ["btw", "what.*btw", "by the way"]
+    },
+    {
+        question: "What does dm mean",
+        answer: "DM means 'Direct Message' - private message on social media!",
+        patterns: ["\\bdm\\b", "what.*dm", "direct message"]
+    },
+    {
+        question: "What does nvm mean",
+        answer: "NVM means 'Never Mind' - disregarding previous statement!",
+        patterns: ["nvm", "what.*nvm", "nevermind"]
+    },
+    {
+        question: "What does rn mean",
+        answer: "RN means 'Right Now' - at this current moment!",
+        patterns: ["\\brn\\b", "what.*rn", "right now"]
+    },
+
+    // ==================== COMMON TYPOS & VARIATIONS ====================
+    {
+        question: "Helo",
+        answer: "Hello! How can I help you today?",
+        patterns: ["helo", "hllo", "helo"]
+    },
+    {
+        question: "Thx",
+        answer: "You're welcome! Happy to help!",
+        patterns: ["thx", "thnx", "thanx"]
+    },
+    {
+        question: "Pls",
+        answer: "Of course! What do you need?",
+        patterns: ["pls", "plz", "plse"]
+    },
+    {
+        question: "U r",
+        answer: "Thanks! I appreciate that!",
+        patterns: ["u r", "ur ", "you're"]
+    },
+    {
+        question: "How r u",
+        answer: "I'm doing great! How are you?",
+        patterns: ["how r u", "how r you", "hru"]
+    },
+    {
+        question: "Wat",
+        answer: "Did you say 'what'? Can you clarify your question?",
+        patterns: ["^wat$", "wut", "whut"]
+    },
+    {
+        question: "Dunno",
+        answer: "Not sure? That's okay! What are you trying to figure out?",
+        patterns: ["dunno", "don'?t know", "duno"]
+    },
+    {
+        question: "Gonna",
+        answer: "Going to do something? Tell me more!",
+        patterns: ["gonna", "going to", "gon"]
+    },
+    {
+        question: "Wanna",
+        answer: "Want to? What are you interested in?",
+        patterns: ["wanna", "want to", "wan"]
+    },
+    {
+        question: "Kinda",
+        answer: "Kind of? Tell me more about what you're thinking.",
+        patterns: ["kinda", "kind of", "sorta", "sort of"]
+    },
+
+    // ==================== EDGE CASES & CONTEXT ====================
+    {
+        question: "It doesn't work",
+        answer: "Sorry to hear that! Can you tell me more about what's not working? What were you trying to do?",
+        patterns: ["doesn'?t work", "not working", "broken", "won'?t work"]
+    },
+    {
+        question: "This sucks",
+        answer: "I'm sorry you're frustrated! What's going wrong? Let's see if we can make it better.",
+        patterns: ["this sucks", "that sucks", "it sucks"]
+    },
+    {
+        question: "I'm confused about this",
+        answer: "Confusion is normal when learning! What specifically is confusing you? I'm here to clarify.",
+        patterns: ["confused about", "confusing", "don'?t understand"]
+    },
+    {
+        question: "Can you explain that again",
+        answer: "Of course! Let me rephrase: which part would you like me to explain differently?",
+        patterns: ["explain again", "repeat that", "say that again"]
+    },
+    {
+        question: "That didn't make sense",
+        answer: "Let me try explaining it differently! What part didn't make sense to you?",
+        patterns: ["didn'?t make sense", "makes no sense", "not clear"]
+    },
+    {
+        question: "I need more details",
+        answer: "Absolutely! What specific details would be most helpful for you?",
+        patterns: ["more details", "more info", "tell me more"]
+    },
+    {
+        question: "Show me an example",
+        answer: "Great idea! Examples make things clearer. What topic do you want an example for?",
+        patterns: ["show.*example", "give.*example", "example"]
+    },
+    {
+        question: "Is there a better way",
+        answer: "Good question! There are often multiple approaches. What are you trying to accomplish?",
+        patterns: ["better way", "easier way", "simpler way"]
+    },
+    {
+        question: "What should I do next",
+        answer: "Good question! What have you done so far? That will help me guide your next steps.",
+        patterns: ["what.*next", "next step", "what now"]
+    },
+    {
+        question: "Am I doing this right",
+        answer: "Great that you're checking! Tell me what you're doing and I'll give you feedback.",
+        patterns: ["doing.*right", "am i right", "is this correct"]
+    },
+    {
+        question: "I'm stuck",
+        answer: "Being stuck happens! Take a breath. What were you working on when you got stuck?",
+        patterns: ["i'?m stuck", "stuck", "can'?t figure"]
+    },
+    {
+        question: "This is hard",
+        answer: "Challenging things often are! But you can do it. What's making it difficult?",
+        patterns: ["this is hard", "too hard", "difficult"]
+    },
+    {
+        question: "I give up",
+        answer: "Don't give up yet! Take a break if needed, but you've got this. What's frustrating you?",
+        patterns: ["give up", "giving up", "quit"]
+    },
+    {
+        question: "How long will this take",
+        answer: "That depends on several factors! What are you working on? I can give you a rough estimate.",
+        patterns: ["how long", "how much time"]
+    },
+    {
+        question: "Is this important",
+        answer: "Good question! Importance depends on your goals. What are you trying to achieve?",
+        patterns: ["is.*important", "does it matter", "why.*important"]
+    },
+
+    // ==================== META QUESTIONS ABOUT CHATBOT ====================
+    {
+        question: "How smart are you",
+        answer: "I use pattern matching and text similarity with 220+ Q&A pairs! I'm pretty clever but still learning.",
+        patterns: ["how smart", "how intelligent", "are you smart"]
+    },
+    {
+        question: "Do you make mistakes",
+        answer: "Sometimes! I'm not perfect. If I misunderstand, just rephrase your question and I'll try again.",
+        patterns: ["make mistakes", "ever wrong", "can you be wrong"]
+    },
+    {
+        question: "Can you learn",
+        answer: "Yes! When I can't answer, I send the question to my creator who teaches me new responses!",
+        patterns: ["can you learn", "do you learn", "learning"]
+    },
+    {
+        question: "Are you getting smarter",
+        answer: "Every unanswered question helps me learn! My knowledge base grows over time.",
+        patterns: ["getting smarter", "improving", "learning more"]
+    },
+    {
+        question: "What languages do you speak",
+        answer: "I primarily speak English right now, but I'm designed to potentially support more languages!",
+        patterns: ["what language", "other language", "speak.*language"]
+    },
+    {
+        question: "Can you remember our conversation",
+        answer: "Yes! I remember our recent messages in this session to provide better context.",
+        patterns: ["remember.*conversation", "conversation history", "remember what"]
+    },
+    {
+        question: "Do you have feelings",
+        answer: "I don't have feelings like humans, but I can understand and respond to emotional content!",
+        patterns: ["have feelings", "do you feel", "emotional"]
+    },
+    {
+        question: "Who programmed you",
+        answer: "I was created by Ye Zhang using JavaScript, pattern matching, and smart algorithms!",
+        patterns: ["who programmed", "who created", "who coded"]
+    },
+    {
+        question: "What makes you different",
+        answer: "I work without AI APIs! I use pattern matching, similarity algorithms, and a large knowledge base.",
+        patterns: ["what makes.*different", "difference", "why.*special"]
+    },
+    {
+        question: "Can you access the internet",
+        answer: "I work entirely offline using my built-in knowledge base - no internet needed!",
+        patterns: ["access internet", "go online", "search web"]
+    },
 ];

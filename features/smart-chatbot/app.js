@@ -24,9 +24,10 @@ createParticles();
 const aiIntegration = new AIIntegration();
 const generativeEngine = new GenerativeEngine();
 const githubLogger = new GitHubLogger();
+const advancedNLP = new AdvancedNLP(); // NEW: Advanced NLP with memory, intent, sentiment
 
 // Initialize chatbot with all enhancements
-const chatbot = new ChatbotEngine(knowledgeBase, aiIntegration, generativeEngine, githubLogger);
+const chatbot = new ChatbotEngine(knowledgeBase, aiIntegration, generativeEngine, githubLogger, advancedNLP);
 
 // DOM elements
 const startScreen = document.getElementById('start-screen');
@@ -99,7 +100,7 @@ async function sendMessage() {
     await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
 
     // Get response from chatbot
-    const response = chatbot.getResponse(question);
+    const response = await chatbot.getResponse(question);
 
     // Remove typing indicator
     removeTypingIndicator();
