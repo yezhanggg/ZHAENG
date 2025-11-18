@@ -25,6 +25,49 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        /* Background particles */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float linear forwards;
+            animation-duration: 1.5s;
+        }
+
+        .particle.slow {
+            animation-duration: 4s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px) translateX(0px);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.8;
+            }
+            95% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+
         /* Main Content */
         main {
             min-height: 100vh;
@@ -77,6 +120,10 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
             .gallery {
                 gap: 2rem;
             }
@@ -92,17 +139,41 @@
         }
 
         @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
             .gallery {
                 gap: 1.5rem;
             }
 
             .gallery-item {
-                width: 120px;
-                height: 120px;
+                width: 110px;
+                height: 110px;
             }
 
             .icon-wrapper {
-                font-size: 3.5rem;
+                font-size: 3.2rem;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 360px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .gallery {
+                gap: 1.2rem;
+            }
+
+            .gallery-item {
+                width: 100px;
+                height: 100px;
+            }
+
+            .icon-wrapper {
+                font-size: 3rem;
             }
         }
 
@@ -144,6 +215,9 @@
     </style>
 </head>
 <body>
+    <!-- Background particles -->
+    <div id="particles"></div>
+
     <!-- Gallery -->
     <main>
         <div class="container">
@@ -172,6 +246,71 @@
     </main>
 
     <script>
+        let isSlowMode = false;
+
+        // Create a single bubble
+        function createBubble() {
+            const particlesContainer = document.getElementById('particles');
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+
+            // Random horizontal position
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = '100%';
+
+            // Random sizes like soda bubbles (some tiny, some large)
+            const sizeRandom = Math.random();
+            let size;
+            if (sizeRandom < 0.3) {
+                size = Math.random() * 8 + 4; // small bubbles
+            } else if (sizeRandom < 0.7) {
+                size = Math.random() * 12 + 12; // medium bubbles
+            } else {
+                size = Math.random() * 15 + 20; // large bubbles
+            }
+
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+
+            // Random horizontal drift
+            const drift = (Math.random() - 0.5) * 100;
+            particle.style.setProperty('--drift', drift + 'px');
+
+            // Set duration based on mode (2x slower)
+            if (isSlowMode) {
+                particle.style.animationDuration = (Math.random() * 4 + 6) + 's'; // 6-10s
+                particle.classList.add('slow');
+            } else {
+                particle.style.animationDuration = '3s'; // 3s
+            }
+
+            particlesContainer.appendChild(particle);
+
+            // Remove bubble when animation ends and create a new one
+            particle.addEventListener('animationend', () => {
+                particle.remove();
+                createBubble();
+            });
+        }
+
+        // Create background particles (soda bubbles)
+        function createParticles() {
+            // Create initial set of bubbles with continuous staggering
+            for (let i = 0; i < 80; i++) {
+                setTimeout(() => {
+                    createBubble();
+                }, i * 50); // Create one every 50ms for continuous flow
+            }
+
+            // Slow down all bubbles after 0.5 seconds
+            setTimeout(() => {
+                isSlowMode = true;
+            }, 500);
+        }
+
+        // Initialize particles
+        createParticles();
+
         // Prevent pinch zoom on iOS
         document.addEventListener('gesturestart', (e) => e.preventDefault());
         document.addEventListener('gesturechange', (e) => e.preventDefault());

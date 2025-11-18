@@ -3,10 +3,26 @@
 
 class AIIntegration {
     constructor() {
-        // Load API settings from localStorage
-        this.enabled = localStorage.getItem('ai_enabled') === 'true';
-        this.provider = localStorage.getItem('ai_provider') || 'gemini';
-        this.apiKey = localStorage.getItem('ai_api_key') || '';
+        // Load API settings from localStorage or use defaults
+        const storedEnabled = localStorage.getItem('ai_enabled');
+        const storedProvider = localStorage.getItem('ai_provider');
+        const storedApiKey = localStorage.getItem('ai_api_key');
+
+        // Default to OpenRouter with sherlock-dash-alpha if not configured
+        this.enabled = storedEnabled !== null ? storedEnabled === 'true' : true;
+        this.provider = storedProvider || 'openrouter';
+        this.apiKey = storedApiKey || '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';
+
+        // Save defaults if not already saved
+        if (storedEnabled === null) {
+            localStorage.setItem('ai_enabled', 'true');
+        }
+        if (storedProvider === null) {
+            localStorage.setItem('ai_provider', 'openrouter');
+        }
+        if (storedApiKey === null) {
+            localStorage.setItem('ai_api_key', this.apiKey);
+        }
 
         // API endpoints
         this.endpoints = {
@@ -19,7 +35,7 @@ class AIIntegration {
         this.models = {
             gemini: 'gemini-2.0-flash-exp',
             groq: 'llama-3.3-70b-versatile',
-            openrouter: 'deepseek/deepseek-chat'
+            openrouter: 'openrouter/sherlock-dash-alpha'
         };
     }
 
@@ -132,7 +148,7 @@ class AIIntegration {
         return data.choices[0].message.content;
     }
 
-    // Query OpenRouter API
+    // Query OpenRouter API (sherlock-dash-alpha)
     async queryOpenRouter(question) {
         const response = await fetch(this.endpoints.openrouter, {
             method: 'POST',
@@ -147,20 +163,24 @@ class AIIntegration {
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are a helpful chatbot. Keep answers short (1-2 sentences).'
+                        content: 'You are Sherlock, an intelligent and analytical assistant. Provide clear, thoughtful, and concise answers. Use reasoning and logic to help users understand complex topics. Keep responses helpful and conversational.'
                     },
                     {
                         role: 'user',
                         content: question
                     }
                 ],
-                max_tokens: 100,
-                temperature: 0.7
+                max_tokens: 500,
+                temperature: 0.7,
+                top_p: 0.9,
+                frequency_penalty: 0,
+                presence_penalty: 0
             })
         });
 
         if (!response.ok) {
-            throw new Error(`OpenRouter API error: ${response.status}`);
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`OpenRouter API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
         }
 
         const data = await response.json();

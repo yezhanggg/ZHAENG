@@ -1,18 +1,64 @@
+// Create background particles (soda bubbles)
+let isSlowMode = false;
+
+// Create a single bubble
+function createBubble() {
+    const particlesContainer = document.getElementById('particles');
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+
+    // Random horizontal position
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.top = '100%';
+
+    // Random sizes like soda bubbles (some tiny, some large)
+    const sizeRandom = Math.random();
+    let size;
+    if (sizeRandom < 0.3) {
+        size = Math.random() * 8 + 4; // small bubbles
+    } else if (sizeRandom < 0.7) {
+        size = Math.random() * 12 + 12; // medium bubbles
+    } else {
+        size = Math.random() * 15 + 20; // large bubbles
+    }
+
+    particle.style.width = size + 'px';
+    particle.style.height = size + 'px';
+
+    // Random horizontal drift
+    const drift = (Math.random() - 0.5) * 100;
+    particle.style.setProperty('--drift', drift + 'px');
+
+    // Set duration based on mode (2x slower)
+    if (isSlowMode) {
+        particle.style.animationDuration = (Math.random() * 4 + 6) + 's'; // 6-10s
+        particle.classList.add('slow');
+    } else {
+        particle.style.animationDuration = '3s'; // 3s
+    }
+
+    particlesContainer.appendChild(particle);
+
+    // Remove bubble when animation ends and create a new one
+    particle.addEventListener('animationend', () => {
+        particle.remove();
+        createBubble();
+    });
+}
+
 // Create background particles
 function createParticles() {
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = '100%';
-        particle.style.animationDelay = Math.random() * 5 + 's';
-        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-        const size = Math.random() * 8 + 4;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particlesContainer.appendChild(particle);
+    // Create initial set of bubbles with continuous staggering
+    for (let i = 0; i < 80; i++) {
+        setTimeout(() => {
+            createBubble();
+        }, i * 50); // Create one every 50ms for continuous flow
     }
+
+    // Slow down all bubbles after 0.5 seconds
+    setTimeout(() => {
+        isSlowMode = true;
+    }, 500);
 }
 
 // Color Utilities

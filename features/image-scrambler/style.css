@@ -402,8 +402,13 @@ body {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     pointer-events: none;
-    animation: float linear infinite;
+    animation: float linear forwards;
+    animation-duration: 1.5s;
     z-index: 0;
+}
+
+.particle.slow {
+    animation-duration: 4s;
 }
 
 @keyframes float {
@@ -411,14 +416,14 @@ body {
         transform: translateY(0px) translateX(0px);
         opacity: 0;
     }
-    10% {
-        opacity: 1;
+    5% {
+        opacity: 0.8;
     }
-    90% {
-        opacity: 1;
+    95% {
+        opacity: 0.8;
     }
     100% {
-        transform: translateY(-100vh) translateX(50px);
+        transform: translateY(-110vh) translateX(var(--drift));
         opacity: 0;
     }
 }

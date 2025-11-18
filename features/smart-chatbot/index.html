@@ -27,7 +27,7 @@
                 <div class="chat-messages" id="chatMessages">
                     <div class="message bot">
                         <div class="message-content">
-                            Hi! I'm here to help answer your questions. What would you like to know?
+                            Bro, just ask me bro
                         </div>
                     </div>
                 </div>
@@ -48,98 +48,6 @@
                                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                             </svg>
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Info Panel -->
-            <div id="info-panel">
-                <div class="info-text">
-                    💡 I learn from questions I can't answer!
-                </div>
-                <button id="settings-btn" class="settings-btn">⚙️</button>
-            </div>
-        </div>
-
-        <!-- Settings Modal -->
-        <div id="settings-modal" class="settings-modal hidden">
-            <div class="settings-content">
-                <div class="settings-header">
-                    <h2>AI Settings</h2>
-                    <button id="close-settings" class="close-btn">×</button>
-                </div>
-
-                <div class="settings-body">
-                    <div class="setting-item">
-                        <label class="toggle-label">
-                            <input type="checkbox" id="ai-toggle">
-                            <span>Enable AI Fallback</span>
-                        </label>
-                        <p class="setting-description">Use AI when pattern matching fails (requires API key)</p>
-                    </div>
-
-                    <div class="setting-item">
-                        <label for="ai-provider">AI Provider</label>
-                        <select id="ai-provider">
-                            <option value="gemini">Google Gemini (Recommended)</option>
-                            <option value="groq">Groq</option>
-                            <option value="openrouter">OpenRouter</option>
-                        </select>
-                    </div>
-
-                    <div class="setting-item">
-                        <label for="api-key">API Key</label>
-                        <input type="password" id="api-key" placeholder="Enter your API key">
-                        <p class="setting-description">
-                            <a href="#" id="get-key-link" target="_blank">Get free API key</a>
-                        </p>
-                    </div>
-
-                    <hr class="setting-divider">
-
-                    <h3 class="setting-section-title">GitHub Learning System</h3>
-
-                    <div class="setting-item">
-                        <label class="toggle-label">
-                            <input type="checkbox" id="github-toggle">
-                            <span>Enable GitHub Logging</span>
-                        </label>
-                        <p class="setting-description">Auto-log unanswered questions to GitHub for training</p>
-                    </div>
-
-                    <div class="setting-item">
-                        <label for="github-token">GitHub Personal Access Token</label>
-                        <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxx">
-                        <p class="setting-description">
-                            <a href="https://github.com/settings/tokens/new" target="_blank">Create token</a> with "repo" scope
-                        </p>
-                    </div>
-
-                    <div class="setting-item">
-                        <label for="github-owner">Repository Owner</label>
-                        <input type="text" id="github-owner" placeholder="your-username">
-                    </div>
-
-                    <div class="setting-item">
-                        <label for="github-repo">Repository Name</label>
-                        <input type="text" id="github-repo" placeholder="ZHAENG">
-                        <p class="setting-description">Questions will be saved to: unanswered_questions.json</p>
-                    </div>
-
-                    <div class="setting-item">
-                        <button id="test-github" class="test-btn">Test GitHub Connection</button>
-                        <span id="github-test-status" class="test-status"></span>
-                    </div>
-
-                    <div class="setting-item">
-                        <button id="save-settings" class="save-btn">Save Settings</button>
-                        <button id="clear-settings" class="clear-btn">Clear All</button>
-                    </div>
-
-                    <div class="setting-info">
-                        <p><strong>AI Status:</strong> <span id="ai-status">Disabled</span></p>
-                        <p><strong>GitHub Status:</strong> <span id="github-status">Disabled</span></p>
-                        <p class="small-text">Questions flow: Local KB → AI (if enabled) → GitHub (if enabled) → Email</p>
                     </div>
                 </div>
             </div>

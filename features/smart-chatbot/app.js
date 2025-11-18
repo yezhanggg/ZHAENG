@@ -1,18 +1,64 @@
+// Create background particles (soda bubbles)
+let isSlowMode = false;
+
+// Create a single bubble
+function createBubble() {
+    const particlesContainer = document.getElementById('particles');
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+
+    // Random horizontal position
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.top = '100%';
+
+    // Random sizes like soda bubbles (some tiny, some large)
+    const sizeRandom = Math.random();
+    let size;
+    if (sizeRandom < 0.3) {
+        size = Math.random() * 8 + 4; // small bubbles
+    } else if (sizeRandom < 0.7) {
+        size = Math.random() * 12 + 12; // medium bubbles
+    } else {
+        size = Math.random() * 15 + 20; // large bubbles
+    }
+
+    particle.style.width = size + 'px';
+    particle.style.height = size + 'px';
+
+    // Random horizontal drift
+    const drift = (Math.random() - 0.5) * 100;
+    particle.style.setProperty('--drift', drift + 'px');
+
+    // Set duration based on mode (2x slower)
+    if (isSlowMode) {
+        particle.style.animationDuration = (Math.random() * 4 + 6) + 's'; // 6-10s
+        particle.classList.add('slow');
+    } else {
+        particle.style.animationDuration = '3s'; // 3s
+    }
+
+    particlesContainer.appendChild(particle);
+
+    // Remove bubble when animation ends and create a new one
+    particle.addEventListener('animationend', () => {
+        particle.remove();
+        createBubble();
+    });
+}
+
 // Create background particles
 function createParticles() {
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = '100%';
-        particle.style.animationDelay = Math.random() * 5 + 's';
-        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-        const size = Math.random() * 8 + 4;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particlesContainer.appendChild(particle);
+    // Create initial set of bubbles with continuous staggering
+    for (let i = 0; i < 80; i++) {
+        setTimeout(() => {
+            createBubble();
+        }, i * 50); // Create one every 50ms for continuous flow
     }
+
+    // Slow down all bubbles after 0.5 seconds
+    setTimeout(() => {
+        isSlowMode = true;
+    }, 500);
 }
 
 // Initialize particles
@@ -128,264 +174,6 @@ chatInput.addEventListener('keypress', (e) => {
     }
 });
 
-// Add welcome suggestions after a delay (only if chat is started)
-let welcomeSuggestionShown = false;
-
-function showWelcomeSuggestion() {
-    if (!welcomeSuggestionShown && !mainView.classList.contains('hidden')) {
-        addMessage("Try asking: 'What features are available?' or 'Tell me a joke!'", 'system');
-        welcomeSuggestionShown = true;
-    }
-}
-
-// Show suggestion after main view is visible
-const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-        if (mutation.target === mainView && !mainView.classList.contains('hidden')) {
-            setTimeout(showWelcomeSuggestion, 2000);
-        }
-    });
-});
-
-observer.observe(mainView, {
-    attributes: true,
-    attributeFilter: ['class']
-});
-
-// ==================== AI SETTINGS UI ====================
-
-// DOM elements for settings
-const settingsBtn = document.getElementById('settings-btn');
-const settingsModal = document.getElementById('settings-modal');
-const closeSettings = document.getElementById('close-settings');
-const aiToggle = document.getElementById('ai-toggle');
-const aiProvider = document.getElementById('ai-provider');
-const apiKeyInput = document.getElementById('api-key');
-const saveSettingsBtn = document.getElementById('save-settings');
-const clearSettingsBtn = document.getElementById('clear-settings');
-const aiStatus = document.getElementById('ai-status');
-const getKeyLink = document.getElementById('get-key-link');
-
-// API key links
-const apiKeyLinks = {
-    gemini: 'https://aistudio.google.com/app/apikey',
-    groq: 'https://console.groq.com/keys',
-    openrouter: 'https://openrouter.ai/keys'
-};
-
-// Load settings on startup
-function loadSettings() {
-    aiToggle.checked = aiIntegration.enabled;
-    aiProvider.value = aiIntegration.provider;
-    apiKeyInput.value = aiIntegration.apiKey;
-    updateStatus();
-    updateKeyLink();
-}
-
-// Update AI status display
-function updateStatus() {
-    if (aiIntegration.isConfigured()) {
-        aiStatus.textContent = `Enabled (${aiIntegration.provider})`;
-        aiStatus.style.color = '#10b981';
-    } else if (aiIntegration.enabled && !aiIntegration.apiKey) {
-        aiStatus.textContent = 'Enabled (No API key)';
-        aiStatus.style.color = '#f59e0b';
-    } else {
-        aiStatus.textContent = 'Disabled';
-        aiStatus.style.color = '#6b7280';
-    }
-}
-
-// Update "Get API key" link
-function updateKeyLink() {
-    getKeyLink.href = apiKeyLinks[aiIntegration.provider];
-}
-
-// Open settings modal
-settingsBtn.addEventListener('click', () => {
-    settingsModal.classList.remove('hidden');
-    loadSettings();
-});
-
-// Close settings modal
-closeSettings.addEventListener('click', () => {
-    settingsModal.classList.add('hidden');
-});
-
-// Close modal when clicking outside
-settingsModal.addEventListener('click', (e) => {
-    if (e.target === settingsModal) {
-        settingsModal.classList.add('hidden');
-    }
-});
-
-// Update key link when provider changes
-aiProvider.addEventListener('change', () => {
-    updateKeyLink();
-});
-
-// Save settings
-saveSettingsBtn.addEventListener('click', () => {
-    aiIntegration.setEnabled(aiToggle.checked);
-    aiIntegration.setProvider(aiProvider.value);
-    aiIntegration.setApiKey(apiKeyInput.value.trim());
-
-    updateStatus();
-
-    // Show confirmation
-    const originalText = saveSettingsBtn.textContent;
-    saveSettingsBtn.textContent = '✓ Saved!';
-    saveSettingsBtn.style.background = '#10b981';
-
-    setTimeout(() => {
-        saveSettingsBtn.textContent = originalText;
-        saveSettingsBtn.style.background = '';
-    }, 2000);
-});
-
-// Clear all settings
-clearSettingsBtn.addEventListener('click', () => {
-    if (confirm('Clear all AI settings? This cannot be undone.')) {
-        aiIntegration.clearSettings();
-        loadSettings();
-
-        // Show confirmation
-        const originalText = clearSettingsBtn.textContent;
-        clearSettingsBtn.textContent = '✓ Cleared!';
-
-        setTimeout(() => {
-            clearSettingsBtn.textContent = originalText;
-        }, 2000);
-    }
-});
-
-// Load settings on page load
-loadSettings();
-
-// ==================== GITHUB SETTINGS UI ====================
-
-// DOM elements for GitHub settings
-const githubToggle = document.getElementById('github-toggle');
-const githubToken = document.getElementById('github-token');
-const githubOwner = document.getElementById('github-owner');
-const githubRepo = document.getElementById('github-repo');
-const testGithubBtn = document.getElementById('test-github');
-const githubTestStatus = document.getElementById('github-test-status');
-const githubStatus = document.getElementById('github-status');
-
-// Load GitHub settings
-function loadGitHubSettings() {
-    githubToggle.checked = githubLogger.enabled;
-    githubToken.value = githubLogger.githubToken;
-    githubOwner.value = githubLogger.repoOwner;
-    githubRepo.value = githubLogger.repoName;
-    updateGitHubStatus();
-}
-
-// Update GitHub status display
-function updateGitHubStatus() {
-    if (githubLogger.isConfigured()) {
-        githubStatus.textContent = `Enabled (${githubLogger.repoOwner}/${githubLogger.repoName})`;
-        githubStatus.style.color = '#10b981';
-    } else if (githubLogger.enabled && !githubLogger.githubToken) {
-        githubStatus.textContent = 'Enabled (Not configured)';
-        githubStatus.style.color = '#f59e0b';
-    } else {
-        githubStatus.textContent = 'Disabled';
-        githubStatus.style.color = '#6b7280';
-    }
-}
-
-// Test GitHub connection
-testGithubBtn.addEventListener('click', async () => {
-    githubTestStatus.textContent = 'Testing...';
-    githubTestStatus.className = 'test-status';
-
-    try {
-        // Temporarily set values for testing
-        const tempToken = githubToken.value.trim();
-        const tempOwner = githubOwner.value.trim();
-        const tempRepo = githubRepo.value.trim();
-
-        if (!tempToken || !tempOwner || !tempRepo) {
-            throw new Error('Please fill in all GitHub fields');
-        }
-
-        // Set temporarily
-        githubLogger.githubToken = tempToken;
-        githubLogger.repoOwner = tempOwner;
-        githubLogger.repoName = tempRepo;
-
-        // Test connection
-        const repoInfo = await githubLogger.testConnection();
-
-        githubTestStatus.textContent = `✓ Connected to ${repoInfo.full_name}`;
-        githubTestStatus.className = 'test-status success';
-
-    } catch (error) {
-        githubTestStatus.textContent = `✗ ${error.message}`;
-        githubTestStatus.className = 'test-status error';
-    }
-});
-
-// Update save settings to include GitHub
-const originalSaveHandler = saveSettingsBtn.onclick;
-saveSettingsBtn.onclick = null; // Remove original handler
-
-saveSettingsBtn.addEventListener('click', () => {
-    // Save AI settings
-    aiIntegration.setEnabled(aiToggle.checked);
-    aiIntegration.setProvider(aiProvider.value);
-    aiIntegration.setApiKey(apiKeyInput.value.trim());
-
-    // Save GitHub settings
-    githubLogger.setEnabled(githubToggle.checked);
-    githubLogger.setToken(githubToken.value.trim());
-    githubLogger.setRepository(githubOwner.value.trim(), githubRepo.value.trim());
-
-    updateStatus();
-    updateGitHubStatus();
-
-    // Show confirmation
-    const originalText = saveSettingsBtn.textContent;
-    saveSettingsBtn.textContent = '✓ Saved!';
-    saveSettingsBtn.style.background = '#10b981';
-
-    setTimeout(() => {
-        saveSettingsBtn.textContent = originalText;
-        saveSettingsBtn.style.background = '';
-    }, 2000);
-});
-
-// Update clear settings to include GitHub
-clearSettingsBtn.onclick = null; // Remove original handler
-
-clearSettingsBtn.addEventListener('click', () => {
-    if (confirm('Clear all AI and GitHub settings? This cannot be undone.')) {
-        aiIntegration.clearSettings();
-        githubLogger.clearSettings();
-        loadSettings();
-        loadGitHubSettings();
-
-        // Show confirmation
-        const originalText = clearSettingsBtn.textContent;
-        clearSettingsBtn.textContent = '✓ Cleared!';
-
-        setTimeout(() => {
-            clearSettingsBtn.textContent = originalText;
-        }, 2000);
-    }
-});
-
-// Load GitHub settings when opening modal
-const originalSettingsBtnHandler = settingsBtn.onclick;
-settingsBtn.onclick = null;
-
-settingsBtn.addEventListener('click', () => {
-    settingsModal.classList.remove('hidden');
-    loadSettings();
-    loadGitHubSettings();
-});
-
-// Initialize GitHub settings on load
-loadGitHubSettings();
+// ==================== SETTINGS REMOVED ====================
+// All settings are now managed through the admin panel at /admin.html
+// Regular users cannot access or view AI configuration

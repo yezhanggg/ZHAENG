@@ -33,15 +33,30 @@ body {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     pointer-events: none;
-    animation: float linear infinite;
+    animation: float linear forwards;
+    animation-duration: 1.5s;
     z-index: 0;
 }
 
+.particle.slow {
+    animation-duration: 4s;
+}
+
 @keyframes float {
-    0% { transform: translateY(0px) translateX(0px); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+    0% {
+        transform: translateY(0px) translateX(0px);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.8;
+    }
+    95% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-110vh) translateX(var(--drift));
+        opacity: 0;
+    }
 }
 
 #app {
@@ -585,6 +600,18 @@ input[type="color"] {
 @media (max-width: 1200px) {
     #editor-section {
         grid-template-columns: 1fr;
+        gap: 12px;
+        height: auto;
+    }
+
+    /* Make panels scrollable on tablet/mobile */
+    .panel {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .canvas-panel {
+        max-height: 500px;
     }
 
     #start-btn {
@@ -599,21 +626,217 @@ input[type="color"] {
 
 @media (max-width: 768px) {
     #main-view {
-        padding: 12px;
+        padding: 10px;
+        gap: 10px;
     }
 
     #editor-section {
-        gap: 12px;
+        gap: 10px;
     }
 
     .panel {
-        padding: 15px;
+        padding: 12px;
+        max-height: 300px;
+    }
+
+    .canvas-panel {
+        max-height: 350px;
+        min-height: 250px;
+    }
+
+    #preview-canvas {
+        max-width: 95%;
+        max-height: 95%;
+    }
+
+    .panel h3 {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    /* Make buttons more touch-friendly */
+    .style-btn, .tool-btn {
+        padding: 12px;
+        font-size: 12px;
+        touch-action: manipulation;
+    }
+
+    .action-btn {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .add-layer-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    /* Adjust text inputs */
+    textarea {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    /* Make sliders easier to use */
+    input[type="range"]::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+    }
+
+    .slider-group label {
+        font-size: 11px;
+    }
+
+    /* Design suggestions */
+    .design-suggestions {
+        gap: 8px;
+    }
+
+    .suggestion-preview {
+        height: 60px;
     }
 
     #start-btn {
         font-size: 36px;
         padding: 20px 40px;
         letter-spacing: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    #main-view {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    #editor-section {
+        gap: 8px;
+    }
+
+    .panel {
+        padding: 10px;
+        max-height: 250px;
+    }
+
+    .canvas-panel {
+        max-height: 280px;
+        min-height: 200px;
+    }
+
+    .panel h3 {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    /* Make controls more compact */
+    .control-section {
+        padding: 12px;
+    }
+
+    .control-section h4 {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    /* Single column layout for style buttons */
+    .style-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .tool-btns {
+        gap: 6px;
+    }
+
+    .style-btn, .tool-btn {
+        padding: 10px;
+        font-size: 11px;
+    }
+
+    /* Layer items */
+    .layer-item {
+        padding: 8px;
+    }
+
+    .layer-text {
+        font-size: 11px;
+    }
+
+    .layer-btn {
+        padding: 3px 6px;
+        font-size: 10px;
+    }
+
+    /* Action buttons */
+    .action-btns {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .action-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    /* Upload area */
+    #upload-area {
+        padding: 60px 30px;
+    }
+
+    .upload-text {
+        font-size: 16px;
+    }
+
+    /* Auto design */
+    .auto-design-btn {
+        padding: 12px;
+        font-size: 12px;
+    }
+
+    .design-suggestions {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .suggestion-preview {
+        height: 50px;
+    }
+
+    .suggestion-name {
+        font-size: 10px;
+    }
+
+    #start-btn {
+        font-size: 28px;
+        padding: 16px 32px;
+        letter-spacing: 3px;
+    }
+
+    #start-screen .emoji {
+        font-size: 70px;
+        margin-bottom: 30px;
+    }
+
+    /* Improve input sizing */
+    textarea {
+        font-size: 16px; /* Prevent iOS zoom */
+        padding: 10px;
+        min-height: 60px;
+    }
+
+    input[type="text"] {
+        font-size: 16px; /* Prevent iOS zoom */
+    }
+
+    /* Make color picker easier to tap */
+    input[type="color"] {
+        height: 50px;
     }
 }
 
